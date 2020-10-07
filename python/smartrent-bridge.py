@@ -35,7 +35,7 @@ ws_message = ''
 def on_mqtt_connect(self, client, userdata, flags, rc):
     print("Connected to MQTT broker with result code " + str(rc))
 
-mqtt_client = mqtt.Client()
+mqtt_client = mqtt.Client(transport="websockets")
 mqtt_client.username_pw_set(MQTT_USER, password=MQTT_PASS)
 if MQTT_TLS is True:
     mqtt_client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
@@ -53,8 +53,8 @@ class SmartRentBridge:
         for key, value in devices.items():
             topics[value[1]] = [key, value[2]]
             if value[2] == "thermostat":
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/target/set')
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/mode/set')
+                for postfix in ['target', 'mode', 'fan_mode']:
+                    mqtt_client.subscribe(f'{MQTT_TOPIC_PREFIX}/{value[1]}/{postfix}/set')
             if value[2] == "lock":
                 mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/set')
 
@@ -87,9 +87,12 @@ class SmartRentBridge:
         # Handle Thermostat Commands
         if device_type == "thermostat":
             if command == "mode":
-                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"{value}"}},{{"name":"heating_setpoint","value":"68"}}]}}]'
+                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"{value}"}}]}}]'
             if command == "target":
-                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"heat"}},{{"name":"heating_setpoint","value":"{value}"}}]}}]'
+                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"heating_setpoint","value":"{value}"}},{{"name":"cooling_setpoint","value":"{value}"}}]}}]'
+            if command == "fan_mode":
+                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"fan_mode","value":"{value}"}}]}}]'
+
         # Handle Lock Commands
         if device_type == "lock":
             self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"locked","value":"{value}"}}]}}]'
@@ -107,17 +110,19 @@ class SmartRentBridge:
         msg_type = message_json[3]
         msg_data = message_json[4]
         if msg_type == "attribute_state":
-            attribute = msg_data['attribute']
+            attribute = msg_data['name']
             device_id = msg_data['device_id']
-            value = msg_data['value']
+            value = msg_data['last_read_state']
             # Thermostat Setpoint
-            if attribute == "heating_setpoint":
+            if attribute in ["heating_setpoint", "cooling_setpoint"]
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', value)
             if attribute == "current_temp":
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', value)
             # Thermostat Mode
             if attribute == "mode":
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', value)
+            if attribute == "fan_mode":
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', value)
 
             ######################
             # Lock State
