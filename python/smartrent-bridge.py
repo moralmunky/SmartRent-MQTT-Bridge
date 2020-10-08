@@ -42,21 +42,26 @@ if MQTT_TLS is True:
     mqtt_client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
     mqtt_client.tls_insecure_set(not MQTT_TLS)
 mqtt_client.on_connect = on_mqtt_connect
-
+print(devices)
+print(mqtt_client.__dict__)
 
 class SmartRentBridge:
     ws_message = ''
 
     def __init__(self):
+        print('trying to connect to mqtt')
         mqtt_client.on_message = self.on_mqtt_message
         mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
+        print('connected to mqtt??')
         mqtt_client.loop_start()
         for key, value in devices.items():
             topics[value[1]] = [key, value[2]]
             if value[2] == "thermostat":
-                for postfix in ['target', 'mode', 'fan_mode']:
-                    mqtt_client.subscribe(f'{MQTT_TOPIC_PREFIX}/{value[1]}/{postfix}/set')
+                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/target/set')
+                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/mode/set')
+                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/fan_mode/set')
             if value[2] == "lock":
+                print('subscribing to lock')
                 mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/set')
 
     async def inject(self, flow: mitmproxy.websocket.WebSocketFlow):
@@ -90,10 +95,9 @@ class SmartRentBridge:
             if command == "mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"{value}"}}]}}]'
             if command == "target":
-                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"heating_setpoint","value":"{value}"}},{{"name":"cooling_setpoint","value":"{value}"}}]}}]'
+                self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"cooling_setpoint","value":"{value}"}},{{"name":"heating_setpoint","value":"{value}"}}]}}]'
             if command == "fan_mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"fan_mode","value":"{value}"}}]}}]'
-
         # Handle Lock Commands
         if device_type == "lock":
             self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"locked","value":"{value}"}}]}}]'
@@ -116,29 +120,28 @@ class SmartRentBridge:
             if status == 'ok':
                 with open("last_heartbeat", "w") as f:
                     f.write(datetime.datetime.now().timestamp())
-        
+                    
         if msg_type == "attribute_state":
             attribute = msg_data['name']
             device_id = msg_data['device_id']
             value = msg_data['last_read_state']
             # Thermostat Setpoint
-            if attribute in ["heating_setpoint", "cooling_setpoint"]
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', payload=value, retain=True)
+            if attribute in ["heating_setpoint", "cooling_setpoint"]:
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', payload=value, qos=1, retain=True)
             if attribute == "current_temp":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', payload=value, retain=True)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', payload=value, qos=1, retain=True)
             # Thermostat Mode
             if attribute == "mode":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', payload=value, retain=True)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', payload=value, qos=1, retain=True)
             if attribute == "fan_mode":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', payload=value, retain=True)
-
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', payload=value, qos=1, retain=True)
             ######################
             # Lock State
             if attribute == "locked":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', payload=value, retain=True)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', payload=value, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
             if attribute == "notifications":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=value, retain=True)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=value, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail')
         print(message)
         return
