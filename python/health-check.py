@@ -1,6 +1,7 @@
 import datetime
+import sys
 
-with open("last_heartbeat", "r") as f
+with open("last_heartbeat", "r") as f:
     last_check = float(f.read())
     
 if datetime.datetime.now().timestamp() - last_check < 300:
