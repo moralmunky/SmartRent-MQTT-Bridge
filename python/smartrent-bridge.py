@@ -8,6 +8,7 @@ import time
 import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import datetime
 
 #######################################################
 
@@ -109,6 +110,13 @@ class SmartRentBridge:
         message_json = json.loads(message)
         msg_type = message_json[3]
         msg_data = message_json[4]
+        
+        if msg_type == 'phx_reply':
+            status = msg_data.get('status')
+            if status == 'ok':
+                with open("last_heartbeat", "w") as f:
+                    f.write(datetime.datetime.now().timestamp())
+        
         if msg_type == "attribute_state":
             attribute = msg_data['name']
             device_id = msg_data['device_id']
