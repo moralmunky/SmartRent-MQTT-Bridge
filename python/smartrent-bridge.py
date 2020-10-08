@@ -123,22 +123,22 @@ class SmartRentBridge:
             value = msg_data['last_read_state']
             # Thermostat Setpoint
             if attribute in ["heating_setpoint", "cooling_setpoint"]
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', payload=value, retain=True)
             if attribute == "current_temp":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', payload=value, retain=True)
             # Thermostat Mode
             if attribute == "mode":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', payload=value, retain=True)
             if attribute == "fan_mode":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', payload=value, retain=True)
 
             ######################
             # Lock State
             if attribute == "locked":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', payload=value, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
             if attribute == "notifications":
-                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', value)
+                mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=value, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail')
         print(message)
         return
