@@ -24,3 +24,6 @@ RUN sed -i -e 's/\r$//' /opt/run.sh
 RUN chmod +x /opt/run.sh
 ADD ./python/smartrent-bridge.py /opt/smartrent-bridge.py
 ADD ./python/smartrent-login.py /opt/smartrent-login.py
+ADD ./python/health-check.py /opt/health-check.py
+
+HEALTHCHECK --interval=60s --timeout=5s --start-period=120s CMD python3 /opt/health-check.py
