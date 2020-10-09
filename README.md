@@ -9,7 +9,11 @@ Chrome is configured to proxy the connection through [mitmproxy](https://mitmpro
 # How to use it: 
 The easiest way to run this is with [Docker](https://docs.docker.com/install/):
 `docker build . -t smartrent-mqtt-bridge`
-`docker run --env-file smartrent.env -it smartrent-mqtt-bridge`
+`docker run --env-file --restart always smartrent.env -it smartrent-mqtt-bridge`
+
+Occasionally, the connection to Smartrent times out. This is configured with a health check, and running it in a swarm will take advantage of the health check to restart when necessary.
+`docker service create --name=smartrent-mqtt-bridge --env-file smartrent.env smartrent-mqtt-bridge`
+
 
 ## Configure your Devices:
 You will likely need to edit the `devices` variable in `smartrent-bridge.py` to make it match the devices and Device IDs in your apartment. I found my device IDs by watching the messages in the logs as I interacted with each device (either physically or via the SmartRent app/web). In Chrome, open the Network tab and click on the `websocket?` request. The channel ID will be the first value in the array of the request.
