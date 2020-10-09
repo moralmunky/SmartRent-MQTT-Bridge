@@ -49,17 +49,16 @@ class SmartRentBridge:
     ws_message = ''
 
     def __init__(self):
-        print('trying to connect to mqtt')
         mqtt_client.on_message = self.on_mqtt_message
         mqtt_client.connect(MQTT_HOST, MQTT_PORT, 60)
-        print('connected to mqtt??')
         mqtt_client.loop_start()
         for key, value in devices.items():
             topics[value[1]] = [key, value[2]]
             if value[2] == "thermostat":
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/target/set')
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/mode/set')
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/fan_mode/set')
+                for postfix in ['target', 'mode', 'fan_mode']:
+                    topic = f'{MQTT_TOPIC_PREFIX}/{value[1]}/{postfix}/set'
+                    print(f'Subscribing to {topic}')
+                    mqtt_client.subscribe(topic)
             if value[2] == "lock":
                 print('subscribing to lock')
                 mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/set')
