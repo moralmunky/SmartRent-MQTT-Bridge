@@ -28,6 +28,7 @@ You will likely need to edit the `devices` variable in `smartrent-bridge.py` to 
 | ---------------- |:----------------:|--------|
 |SMARTRENT_EMAIL   | user@example.com | Used to automatically log into your SmartRent account with Selenium
 |SMARTRENT_PASSWORD| aS$ecureP4ssw0rd | ^
+|DEVICES           | {}               | Monitors and updates those Smartrent devices
 |MQTT_HOST         | mqtt.example.com | IP/Hostname of your MQTT Broker
 |MQTT_PORT         | 8883             | MQTT broker defaults are 1883 and 8883 for TLS
 |MQTT_TLS          | True             | Whether communication with MQTT Broker should be encrypted
