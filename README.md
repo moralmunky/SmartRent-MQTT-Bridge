@@ -16,15 +16,7 @@ Occasionally, the connection to Smartrent times out. This is configured with a h
 
 
 ## Configure your Devices:
-You will likely need to edit the `devices` variable in `smartrent-bridge.py` to make it match the devices and Device IDs in your apartment. I found my device IDs by watching the messages in the logs as I interacted with each device (either physically or via the SmartRent app/web). In Chrome, open the Network tab and click on the `websocket?` request. The channel ID will be the first value in the array of the request.
-
-    devices = {
-    #   devId: ["friendly name", "device_mqtt_topic", "device type", "channel"]
-        31411: ["Bedroom Thermostat", "bedroom_thermostat", "thermostat", 1],
-        31406: ["Office Thermostat", "office_thermostat", "thermostat", 2],
-        31399: ["Living Room Thermostat", "living_room_thermostat", "thermostat, 3"],
-        31389: ["Front Door Lock", "front_door_lock", "lock", 4]
-    }
+I found my device IDs by watching the messages in the logs as I interacted with each device (either physically or via the SmartRent app/web). In Chrome, open the Network tab and click on the `websocket?` request. The channel ID will be the first value in the array of the request.
  
 
 ## Set these Environment Variables in `smartrent.env`: 
