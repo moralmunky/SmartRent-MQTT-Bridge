@@ -20,14 +20,15 @@ MQTT_PASS = os.environ.get('MQTT_PASS')
 MQTT_TLS = bool(os.environ.get('MQTT_TLS'))
 MQTT_TOPIC_PREFIX = os.environ.get('MQTT_TOPIC_PREFIX')
 
-devices = {
-    # Obtain deviceId and channel id from sniffing chrome request from smartrent
-    #  deviceId: ["friendly name", "device_mqtt_topic", "device type",channel id]
-    #     31411: ["Bedroom Thermostat", "bedroom_thermostat", "thermostat",1],
-    #     31406: ["Office Thermostat", "office_thermostat", "thermostat",2],
-    #     31399: "Living Room Thermostat", "living_room_thermostat", "thermostat",3],
-    #     31389: ["Front Door Lock", "front_door_lock", "lock",4]
-}
+# devices = {
+#     # Obtain deviceId and channel id from sniffing chrome request from smartrent
+#     #  deviceId: ["friendly name", "device_mqtt_topic", "device type",channel id]
+#     #     31411: ["Bedroom Thermostat", "bedroom_thermostat", "thermostat",1],
+#     #     31406: ["Office Thermostat", "office_thermostat", "thermostat",2],
+#     #     31399: "Living Room Thermostat", "living_room_thermostat", "thermostat",3],
+#     #     31389: ["Front Door Lock", "front_door_lock", "lock",4]
+# }
+devices = json.loads(os.environ.get('DEVICES'))
 
 #######################################################
 topics = {}
@@ -82,13 +83,15 @@ class SmartRentBridge:
             await asyncio.sleep(2)
 
     def on_mqtt_message(self, client, userdata, msg):
+        print(f'Got MQTT message: {msg.topic}')
+
         topic = msg.topic.split('/')
         device_id = str(topics[topic[1]][0])
         device_type = topics[topic[1]][1]
         command = topic[2]
         deviceChannel = str(devices[int(device_id)][3])
-        print("Got mqtt message!")
         value = msg.payload.decode().lower()
+        
         # Handle Thermostat Commands
         if device_type == "thermostat":
             if command == "mode":
@@ -97,6 +100,7 @@ class SmartRentBridge:
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"cooling_setpoint","value":"{value}"}},{{"name":"heating_setpoint","value":"{value}"}}]}}]'
             if command == "fan_mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"fan_mode","value":"{value}"}}]}}]'
+        
         # Handle Lock Commands
         if device_type == "lock":
             self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"locked","value":"{value}"}}]}}]'
