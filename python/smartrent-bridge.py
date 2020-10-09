@@ -94,6 +94,7 @@ class SmartRentBridge:
         
         # Handle Thermostat Commands
         if device_type == "thermostat":
+            print('Updating thermostat')
             if command == "mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"{value}"}}]}}]'
             if command == "target":
@@ -103,6 +104,7 @@ class SmartRentBridge:
         
         # Handle Lock Commands
         if device_type == "lock":
+            print('Updating lock')
             self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"locked","value":"{value}"}}]}}]'
 
     #####
