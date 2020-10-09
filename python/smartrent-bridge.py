@@ -89,7 +89,7 @@ class SmartRentBridge:
         device_id = str(topics[topic[1]][0])
         device_type = topics[topic[1]][1]
         command = topic[2]
-        deviceChannel = str(devices[int(device_id)][3])
+        deviceChannel = str(devices[str(device_id)][3])
         value = msg.payload.decode().lower()
         
         # Handle Thermostat Commands
