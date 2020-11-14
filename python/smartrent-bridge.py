@@ -34,7 +34,7 @@ devices = json.loads(os.environ.get('DEVICES'))
 topics = {}
 ws_message = ''
 
-def on_mqtt_connect(self, client, userdata, flags, rc):
+def on_mqtt_connect(self, client, userdata, flags, rc=None):
     print("Connected to MQTT broker with result code " + str(rc))
 
 mqtt_client = mqtt.Client(transport="websockets")
