@@ -134,6 +134,7 @@ class SmartRentBridge:
         if msg_type == "attribute_state":
             attribute = msg_data['name']
             #device_id = str(msg_data['device_id'])
+            #fixed for json change
             device_id = str(message_json[2].split(":")[1])
 
             value = msg_data['last_read_state']
