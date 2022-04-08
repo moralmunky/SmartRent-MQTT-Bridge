@@ -5,7 +5,7 @@ USER root
 RUN apt-get update && apt-get install -y apt-utils
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
-	build-essential python3.7-dev pyhton3.7 python-setuptools python3-pip python3-smbus \
+	build-essential python3-dev pyhton3 python-setuptools python3-pip python3-smbus \
 	libncursesw5-dev libgdbm-dev libc6-dev \
 	zlib1g-dev libsqlite3-dev tk-dev \
 	libssl-dev \
