@@ -150,7 +150,6 @@ class SmartRentBridge:
             ######################
             # Lock State
             if attribute == "locked":
-                print(devices[930416][1])
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', payload=value, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
                 print("Payload: " + value)
