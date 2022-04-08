@@ -3,7 +3,7 @@ from selenium import webdriver
 import asyncio
 import os, re
 
-smartrent_email = os.environ.get('SMARTRENT_EMAIL')      
+smartrent_email = os.environ.get('SMARTRENT_EMAIL')
 smartrent_password = os.environ.get('SMARTRENT_PASSWORD')
 
 user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.50 Safari/537.36'
@@ -65,9 +65,6 @@ def main():
         driver.get('https://control.smartrent.com/resident')
         purgeTmp()
         print("Done.")
-
-
-
 
 if __name__ == "__main__":
     # execute only if run as a script

@@ -20,22 +20,25 @@ MQTT_PASS = os.environ.get('MQTT_PASS')
 MQTT_TLS = bool(os.environ.get('MQTT_TLS'))
 MQTT_TOPIC_PREFIX = os.environ.get('MQTT_TOPIC_PREFIX')
 
-# devices = {
-#     # Obtain deviceId and channel id from sniffing chrome request from smartrent
-#     #  deviceId: ["friendly name", "device_mqtt_topic", "device type",channel id]
-#     #     31411: ["Bedroom Thermostat", "bedroom_thermostat", "thermostat",1],
-#     #     31406: ["Office Thermostat", "office_thermostat", "thermostat",2],
-#     #     31399: "Living Room Thermostat", "living_room_thermostat", "thermostat",3],
-#     #     31389: ["Front Door Lock", "front_door_lock", "lock",4]
-# }
 devices = json.loads(os.environ.get('DEVICES'))
 
 #######################################################
 topics = {}
 ws_message = ''
 
-def on_mqtt_connect(self, client, userdata, flags, rc=None):
-    print("Connected to MQTT broker with result code " + str(rc))
+# def on_mqtt_connect(self, client, userdata, flags, rc=None):
+#     print("Connected to MQTT broker with result code " + str(rc))
+def on_mqtt_connect(client, userdata, flags, rc):
+    if rc==0:
+        print("MQTT connected OK Returned code=",rc)
+    else:
+        print("MQTT Bad connection Returned code=",rc)
+        # 0: Connection successful
+        # 1: Connection refused    ^`^s incorrect protocol version
+        # 2: Connection refused    ^`^s invalid client identifier
+        # 3: Connection refused    ^`^s server unavailable
+        # 4: Connection refused    ^`^s bad username or password
+        # 5: Connection refused    ^`^s not authorised
 
 mqtt_client = mqtt.Client(transport="websockets")
 mqtt_client.username_pw_set(MQTT_USER, password=MQTT_PASS)
@@ -129,6 +132,7 @@ class SmartRentBridge:
         if msg_type == "attribute_state":
             attribute = msg_data['name']
             device_id = str(msg_data['device_id'])
+            # device_id = str(msg_data['device_id'])
             value = msg_data['last_read_state']
             # Thermostat Setpoint
             if attribute in ["heating_setpoint", "cooling_setpoint"]:
