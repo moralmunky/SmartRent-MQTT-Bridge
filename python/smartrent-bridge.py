@@ -155,7 +155,7 @@ class SmartRentBridge:
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
                 print("Payload: " + value)
             if attribute == "notifications":
-                attrJson = json.dumps(message_json[4])
+                attrJson = json.dumps(message_json)
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=attrJson, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail')
                 print("Payload: " + attrJson)
