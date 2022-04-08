@@ -42,9 +42,10 @@ def on_mqtt_connect(client, userdata, flags, rc):
 
 mqtt_client = mqtt.Client(transport="websockets")
 mqtt_client.username_pw_set(MQTT_USER, password=MQTT_PASS)
-if MQTT_TLS is True:
-    mqtt_client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
-    mqtt_client.tls_insecure_set(not MQTT_TLS)
+#removing gets rid of [SSL: WRONG_VERSION_NUMBER] wrong version number (_ssl.c:1051) error even though set to false
+# if MQTT_TLS is True:
+#     mqtt_client.tls_set(cert_reqs=ssl.CERT_REQUIRED, tls_version=ssl.PROTOCOL_TLSv1_2, ciphers=None)
+#     mqtt_client.tls_insecure_set(not MQTT_TLS)
 mqtt_client.on_connect = on_mqtt_connect
 print(devices)
 print(mqtt_client.__dict__)
