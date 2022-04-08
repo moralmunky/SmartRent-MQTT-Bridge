@@ -2,6 +2,8 @@ FROM selenium/standalone-chrome-debug
 
 USER root
 
+RUN apt-get update && apt-get upgrade -y
+
 RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 	build-essential python-dev pyhton python-setuptools python3-pip python3-smbus \
 	libncursesw5-dev libgdbm-dev libc6-dev \
