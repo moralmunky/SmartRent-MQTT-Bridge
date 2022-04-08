@@ -21,6 +21,7 @@ MQTT_TLS = bool(os.environ.get('MQTT_TLS'))
 MQTT_TOPIC_PREFIX = os.environ.get('MQTT_TOPIC_PREFIX')
 
 devices = json.loads(os.environ.get('DEVICES'))
+lock_states = json.loads(os.environ.get('LOCK_STATES'))
 
 #######################################################
 topics = {}
@@ -136,6 +137,7 @@ class SmartRentBridge:
             #device_id = str(msg_data['device_id'])
             #fixed for json change
             device_id = str(message_json[2].split(":")[1])
+            last_state = str(message_json[4]['last_read_state'])
 
             value = msg_data['last_read_state']
             # Thermostat Setpoint
@@ -155,7 +157,7 @@ class SmartRentBridge:
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
                 print("Payload: " + value)
             if attribute == "notifications":
-                attrJson = json.dumps(msg_data)
+                attrJson = json.dumps({"Last state":lock_states[last_state][0]})
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=attrJson, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail')
                 print("Payload: " + attrJson)
