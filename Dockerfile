@@ -20,6 +20,7 @@ RUN cd /opt/Python-3.7.1 && make install
 #Upgrading pip resolves error with MarkupSafe
 RUN pip3 install -U pip setuptools wheel
 RUN pip3 install -U selenium mitmproxy paho-mqtt asyncio
+RUN pip3 install markupsafe==2.0.1
 ADD ./docker/entry_point.sh /opt/bin/entry_point.sh
 RUN sed -i -e 's/\r$//' /opt/bin/entry_point.sh
 RUN chmod +x /opt/bin/entry_point.sh
