@@ -11,11 +11,11 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
 	libssl-dev \
 	libffi-dev
 
-RUN cd /opt/ && wget https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz
-RUN cd /opt/ && tar -xzf Python-3.7.1.tgz
-RUN cd /opt/Python-3.7.1 && ./configure
-RUN cd /opt/Python-3.7.1 && make
-RUN cd /opt/Python-3.7.1 && make install
+# RUN cd /opt/ && wget https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz
+# RUN cd /opt/ && tar -xzf Python-3.7.1.tgz
+# RUN cd /opt/Python-3.7.1 && ./configure
+# RUN cd /opt/Python-3.7.1 && make
+# RUN cd /opt/Python-3.7.1 && make install
 
 RUN pip3 install -U selenium setuptools mitmproxy paho-mqtt asyncio
 ADD ./docker/entry_point.sh /opt/bin/entry_point.sh
