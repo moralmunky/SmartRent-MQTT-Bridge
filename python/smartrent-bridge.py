@@ -128,6 +128,7 @@ class SmartRentBridge:
             if status == 'ok':
                 with open("last_heartbeat", "w") as f:
                     f.write(str(datetime.datetime.now().timestamp()))
+                print("Heartbeat")
                     
         if msg_type == "attribute_state":
             attribute = msg_data['name']
