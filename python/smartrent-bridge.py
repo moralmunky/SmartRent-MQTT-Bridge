@@ -134,7 +134,7 @@ class SmartRentBridge:
         if msg_type == "attribute_state":
             attribute = msg_data['name']
             device_id = str(msg_data['device_id'])
-            print(device_id)
+            print("deviceID: " + device_id)
             # device_id = str(msg_data['device_id'])
             value = msg_data['last_read_state']
             # Thermostat Setpoint
