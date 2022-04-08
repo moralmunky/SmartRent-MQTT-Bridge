@@ -158,7 +158,7 @@ class SmartRentBridge:
                 attrJson = json.dumps(message_json[4])
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail', payload=attrJson, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/detail')
-                print("Payload: " + value)
+                print("Payload: " + attrJson)
         print(message)
         return
 
