@@ -135,7 +135,7 @@ class SmartRentBridge:
             attribute = msg_data['name']
             #device_id = str(msg_data['device_id'])
             device_id = int(message_json[2].split(":")[1])
-            
+
             value = msg_data['last_read_state']
             # Thermostat Setpoint
             if attribute in ["heating_setpoint", "cooling_setpoint"]:
@@ -150,7 +150,7 @@ class SmartRentBridge:
             ######################
             # Lock State
             if attribute == "locked":
-                print(device_id)
+                print(devices['930416'][1])
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status', payload=value, qos=1, retain=True)
                 print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/status')
                 print("Payload: " + value)
