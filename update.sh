@@ -1,3 +1,4 @@
+cd ..
 rm master.zip
 wget "https://github.com/moralmunky/SmartRent-MQTT-Bridge/archive/refs/heads/master.zip"
 unzip -o master.zip
