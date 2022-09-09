@@ -143,13 +143,21 @@ class SmartRentBridge:
             # Thermostat Setpoint
             if attribute in ["heating_setpoint", "cooling_setpoint"]:
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target', payload=value, qos=1, retain=True)
+                print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/target')
+                print("Payload: " + value)
             if attribute == "current_temp":
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current', payload=value, qos=1, retain=True)
+                print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/current')
+                print("Payload: " + value)
             # Thermostat Mode
             if attribute == "mode":
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode', payload=value, qos=1, retain=True)
+                print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/mode')
+                print("Payload: " + value)
             if attribute == "fan_mode":
                 mqtt_client.publish(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode', payload=value, qos=1, retain=True)
+                print(MQTT_TOPIC_PREFIX + '/' + devices[device_id][1] + '/fan_mode')
+                print("Payload: " + value)
             ######################
             # Lock State
             if attribute == "locked":
