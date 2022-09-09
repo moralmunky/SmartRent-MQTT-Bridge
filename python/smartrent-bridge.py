@@ -121,6 +121,7 @@ class SmartRentBridge:
     def websocket_message(self, flow: mitmproxy.websocket.WebSocketFlow):
         message = flow.messages[-1]
         self.parse_message(message.content)
+        print(message)
 
     def parse_message(self, message):
         print(message)
