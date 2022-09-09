@@ -39,7 +39,7 @@ def login():
     driver.get('https://control.smartrent.com/login')
     print("Navigated to SmartRent login page(username)")
     time.sleep(3)
-    email_box = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div/section/form/div[1]/div[1]/input')
+    email_box = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div/div[1]/div/div[3]/div/input')
     email_box.send_keys(smartrent_email)
     #email_box.submit()
     #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@type='text']"))).send_keys(smartrent_email)
