@@ -46,7 +46,7 @@ def login():
     WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//div[contains(.,"Continue") and @role="button"]'))).click()
     time.sleep(3)
     print("Navigated to SmartRent login page(password)")
-    password_box = driver.find_element(by=By.XPATH, value='/html/body/main/div/div/div/section/form/div[1]/div[1]/input')
+    password_box = driver.find_element(by=By.XPATH, value="//input[@type='password']")
     #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//input[@type='password']"))).send_keys(smartrent_password)
     # Enter login credentials
     password_box.send_keys(smartrent_password)
