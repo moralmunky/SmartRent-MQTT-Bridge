@@ -49,7 +49,7 @@ mqtt_client.username_pw_set(MQTT_USER, password=MQTT_PASS)
 #     mqtt_client.tls_insecure_set(not MQTT_TLS)
 mqtt_client.on_connect = on_mqtt_connect
 print(devices)
-print(mqtt_client.__dict__)
+#print(mqtt_client.__dict__)
 
 class SmartRentBridge:
     ws_message = ''
