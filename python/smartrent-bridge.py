@@ -123,6 +123,7 @@ class SmartRentBridge:
         self.parse_message(message.content)
 
     def parse_message(self, message):
+        print(message)
         message_json = json.loads(message)
         msg_type = message_json[3]
         msg_data = message_json[4]
