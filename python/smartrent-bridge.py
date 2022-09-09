@@ -99,13 +99,15 @@ class SmartRentBridge:
         
         # Handle Thermostat Commands
         if device_type == "thermostat":
-            print('Updating thermostat')
             if command == "mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"mode","value":"{value}"}}]}}]'
+                print('Updating thermostat mode: ' + value)
             if command == "target":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"cooling_setpoint","value":"{value}"}},{{"name":"heating_setpoint","value":"{value}"}}]}}]'
+                print('Updating thermostat target: ' + value)
             if command == "fan_mode":
                 self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"fan_mode","value":"{value}"}}]}}]'
+                print('Updating thermostat fane mode: ' + value)
         
         # Handle Lock Commands
         if device_type == "lock":
