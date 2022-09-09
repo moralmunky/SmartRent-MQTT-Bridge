@@ -111,8 +111,8 @@ class SmartRentBridge:
         
         # Handle Lock Commands
         if device_type == "lock":
-            print('Updating lock')
             self.ws_message = f'["{deviceChannel}","null","devices:{device_id}","update_attributes",{{"device_id":"{device_id}","attributes":[{{"name":"locked","value":"{value}"}}]}}]'
+            print('Updating lock: secure is ' + value)
 
     #####
     def websocket_start(self, flow):
