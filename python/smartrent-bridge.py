@@ -66,8 +66,10 @@ class SmartRentBridge:
                     print(f'Subscribing to {topic}')
                     mqtt_client.subscribe(topic)
             if value[2] == "lock":
-                print('subscribing to lock')
-                mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/set')
+                topic_lock = f'{MQTT_TOPIC_PREFIX}/{value[1]}/set'
+                mqtt_client.subscribe(topic_lock)
+                #mqtt_client.subscribe(MQTT_TOPIC_PREFIX + '/' + value[1] + '/set')
+                print('subscribing to {topic_lock}')
 
     async def inject(self, flow: mitmproxy.websocket.WebSocketFlow):
         joined = False
