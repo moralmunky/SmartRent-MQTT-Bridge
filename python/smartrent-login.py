@@ -55,6 +55,7 @@ def login():
     print("Logged In")
     time.sleep(3)
     driver.get('https://control.smartrent.com/resident')
+    print("Got resident page.")
     return
 
 # Clear Chrome's tmp files so they don't eat your whole disk

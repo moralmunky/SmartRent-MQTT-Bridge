@@ -121,13 +121,14 @@ class SmartRentBridge:
     def websocket_message(self, flow: mitmproxy.websocket.WebSocketFlow):
         message = flow.messages[-1]
         self.parse_message(message.content)
-        print(message)
+        print(message.content)
 
     def parse_message(self, message):
         print(message)
         message_json = json.loads(message)
         msg_type = message_json[3]
         msg_data = message_json[4]
+        print(message_json)
         
         if msg_type == 'phx_reply':
             status = msg_data.get('status')
