@@ -30,7 +30,7 @@ def login():
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument("--disable-setuid-sandbox")
     chrome_options.add_argument(f'user-agent={user_agent}')
-    chrome_options.add_argument('--disable-dev-shm-usage')
+    #chrome_options.add_argument('--disable-dev-shm-usage')
     ### Run through the MITM proxy
     chrome_options.add_argument('--proxy-server=127.0.0.1:8080')
     print("Set arguments")
